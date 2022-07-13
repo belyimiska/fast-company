@@ -3,7 +3,6 @@ import api from "../api";
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
-  const standartBadge = "badge m-2 bg-";
 
   const handleDelete = (userId) => {
     setUsers((prevState) => prevState.filter((user) => user._id !== userId));
@@ -37,7 +36,7 @@ const Users = () => {
 
   return (
     <>
-      <h1>{renderPhrase(users.length)}</h1>
+      <h2>{renderPhrase(users.length)}</h2>
       <table className="table">
         <thead>
           <tr>
@@ -56,7 +55,7 @@ const Users = () => {
               <td>
                 {user.qualities.map((quality) => (
                   <span
-                    className={standartBadge + quality.color}
+                    className={"badge m-1 bg-" + quality.color}
                     key={quality._id}
                   >
                     {quality.name}
