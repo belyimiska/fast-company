@@ -28,11 +28,13 @@ const App = () => {
 
     return (
         <div>
-            <Users
-                onToggleBookMark={handleToggleBookMark}
-                onDelete={handleDelete}
-                users={users}
-            />
+            {users && (
+                <Users
+                    onToggleBookMark={handleToggleBookMark}
+                    onDelete={handleDelete}
+                    users={users}
+                />
+            )}
         </div>
     );
 };
