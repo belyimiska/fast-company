@@ -18,9 +18,9 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
         const arrowUp = <i className="bi bi-caret-up-fill m-2"></i>;
 
         if (selectedSort.path === currentPath) {
-            if (selectedSort.order === "desc") {
+            if (selectedSort.order === "asc") {
                 return arrowDown;
-            } else if (selectedSort.order === "asc") {
+            } else if (selectedSort.order === "desc") {
                 return arrowUp;
             }
         }
