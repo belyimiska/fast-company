@@ -5,14 +5,14 @@ import QualitiesList from "./qualitiesList";
 import { useHistory } from "react-router-dom";
 
 const UserPage = ({ id }) => {
+    const history = useHistory();
     const [userById, setUserById] = useState();
 
     useEffect(() => {
         api.users.getById(id).then((data) => setUserById(data));
     }, []);
 
-    const history = useHistory();
-    const handleUsersListReturn = () => {
+    const handleClick = () => {
         history.push("/users");
     };
 
@@ -25,9 +25,7 @@ const UserPage = ({ id }) => {
                     <QualitiesList qualities={userById.qualities} />
                     <h3>Количество встреч: {userById.completedMeetings}</h3>
                     <h3>Рейтинг: {userById.rate}</h3>
-                    <button onClick={() => handleUsersListReturn()}>
-                        Все пользователи
-                    </button>
+                    <button onClick={handleClick}>Все пользователи</button>
                 </div>
             ) : (
                 <h3>Loading...</h3>
