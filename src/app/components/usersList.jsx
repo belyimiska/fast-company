@@ -6,6 +6,7 @@ import GroupList from "./groupList";
 import api from "../api/index";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
+import UserSearch from "./userSearch";
 import _ from "lodash";
 
 const UsersList = () => {
@@ -13,6 +14,7 @@ const UsersList = () => {
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [searchName, setSearchName] = useState("");
 
     const pageSize = 8;
 
@@ -47,7 +49,12 @@ const UsersList = () => {
         setCurrentPage(1);
     }, [selectedProf]);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchName]);
+
     const handleProfessionSelect = (item) => {
+        setSearchName("");
         setSelectedProf(item);
     };
 
@@ -63,7 +70,18 @@ const UsersList = () => {
         setSelectedProf();
     };
 
+    const handleChange = ({ target }) => {
+        setSelectedProf();
+        setSearchName(target.value);
+    };
+
     if (users) {
+        const searchedUser =
+            searchName &&
+            users.filter((user) =>
+                user.name.toLowerCase().includes(searchName.toLowerCase())
+            );
+
         const filteredUsers = selectedProf
             ? users.filter(
                   (user) =>
@@ -72,25 +90,15 @@ const UsersList = () => {
               )
             : users;
 
-        const count = filteredUsers.length;
+        const count = searchName ? searchedUser.length : filteredUsers.length;
 
         const sortedUsers = _.orderBy(
-            filteredUsers,
+            searchedUser.length > 0 ? searchedUser : filteredUsers,
             [sortBy.path],
             [sortBy.order]
         );
 
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
-
-        if (count === 0) {
-            return (
-                <h2>
-                    <span className="badge bg-danger m-2">
-                        Никто с тобой не тусанёт
-                    </span>
-                </h2>
-            );
-        }
 
         return (
             <div className="d-flex">
@@ -112,14 +120,19 @@ const UsersList = () => {
 
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
-                    <UserTable
-                        onSort={handleSort}
-                        users={userCrop}
-                        selectedSort={sortBy}
-                        onDelete={handleDelete}
-                        onToggleBookMark={handleToggleBookMark}
+                    <UserSearch
+                        onChange={handleChange}
+                        searchName={searchName}
                     />
-
+                    {count > 0 && (
+                        <UserTable
+                            onSort={handleSort}
+                            users={userCrop}
+                            selectedSort={sortBy}
+                            onDelete={handleDelete}
+                            onToggleBookMark={handleToggleBookMark}
+                        />
+                    )}
                     <div className="d-flex justify-content-center">
                         <Pagination
                             itemsCount={count}
