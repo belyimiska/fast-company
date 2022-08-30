@@ -6,7 +6,6 @@ import GroupList from "./groupList";
 import api from "../api/index";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
-import UserSearch from "./userSearch";
 import _ from "lodash";
 
 const UsersList = () => {
@@ -14,7 +13,7 @@ const UsersList = () => {
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
-    const [searchName, setSearchName] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     const pageSize = 8;
 
@@ -47,14 +46,10 @@ const UsersList = () => {
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedProf]);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchName]);
+    }, [selectedProf, searchQuery]);
 
     const handleProfessionSelect = (item) => {
-        setSearchName("");
+        if (searchQuery !== "") setSearchQuery("");
         setSelectedProf(item);
     };
 
@@ -70,19 +65,20 @@ const UsersList = () => {
         setSelectedProf();
     };
 
-    const handleChange = ({ target }) => {
-        setSelectedProf();
-        setSearchName(target.value);
+    const handleSearchQuery = ({ target }) => {
+        setSelectedProf(undefined);
+        setSearchQuery(target.value);
     };
 
     if (users) {
-        const searchedUser =
-            searchName &&
-            users.filter((user) =>
-                user.name.toLowerCase().includes(searchName.toLowerCase())
-            );
-
-        const filteredUsers = selectedProf
+        const filteredUsers = searchQuery
+            ? users.filter(
+                  (user) =>
+                      user.name
+                          .toLowerCase()
+                          .indexOf(searchQuery.toLowerCase()) !== -1
+              )
+            : selectedProf
             ? users.filter(
                   (user) =>
                       JSON.stringify(user.profession) ===
@@ -90,10 +86,10 @@ const UsersList = () => {
               )
             : users;
 
-        const count = searchName ? searchedUser.length : filteredUsers.length;
+        const count = filteredUsers.length;
 
         const sortedUsers = _.orderBy(
-            searchedUser.length > 0 ? searchedUser : filteredUsers,
+            filteredUsers,
             [sortBy.path],
             [sortBy.order]
         );
@@ -120,10 +116,16 @@ const UsersList = () => {
 
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
-                    <UserSearch
-                        onChange={handleChange}
-                        searchName={searchName}
-                    />
+                    <div className="input-group">
+                        <input
+                            value={searchQuery}
+                            onChange={handleSearchQuery}
+                            name="searchQuery"
+                            type="text"
+                            placeholder="Search..."
+                            className="form-control"
+                        />
+                    </div>
                     {count > 0 && (
                         <UserTable
                             onSort={handleSort}
