@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import UserPage from "../components/page/userPage";
-import UserPageChange from "../components/page/userPageChange.jsx/userPageChange";
+import EditUserPage from "../components/page/editUserPage";
 import UsersListPage from "../components/page/usersListPage";
 
 const Users = () => {
@@ -10,10 +10,12 @@ const Users = () => {
 
     return (
         <>
-            {edit ? (
-                <UserPageChange id={userId} />
-            ) : userId ? (
-                <UserPage id={userId} />
+            {userId ? (
+                edit ? (
+                    <EditUserPage id={userId} />
+                ) : (
+                    <UserPage id={userId} />
+                )
             ) : (
                 <UsersListPage />
             )}

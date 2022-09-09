@@ -6,14 +6,16 @@ import SelectField from "../../common/form/selectField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import RadioField from "../../common/form/radioField";
 import { useHistory } from "react-router-dom";
+import { validator } from "../../../utils/validator";
 
-const UserPageChange = ({ id }) => {
+const EditUserPage = ({ id }) => {
     const history = useHistory();
 
     const [data, setData] = useState({});
 
     const [professions, setProfession] = useState([]);
     const [qualities, setQualities] = useState([]);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         api.users.getById(id).then((data) =>
@@ -78,20 +80,49 @@ const UserPageChange = ({ id }) => {
         return qualitiesArray;
     };
 
+    const validatorConfig = {
+        email: {
+            isRequired: {
+                message: "Почта обязательна для заполнения"
+            },
+            isEmail: {
+                message: "Email введен некорректно"
+            }
+        },
+        name: {
+            isRequired: {
+                message: "Введите ваше имя"
+            }
+        }
+    };
+
+    useEffect(() => {
+        validate();
+    }, [data]);
+
+    const validate = () => {
+        const errors = validator(data, validatorConfig);
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const isValid = Object.keys(errors).length === 0;
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        const isValid = validate();
+        if (!isValid) return null;
         const { profession, qualities } = data;
-        const newData = {
-            ...data,
-            profession: getProfessionById(profession),
-            qualities: getQualities(qualities)
-        };
-
-        api.users.update(id, newData).then((data) => {
-            console.log(data);
-        });
-
-        history.push(`/users/${id}`);
+        api.users
+            .update(id, {
+                ...data,
+                profession: getProfessionById(profession),
+                qualities: getQualities(qualities)
+            })
+            .then((data) => {
+                history.push(`/users/${data._id}`);
+                console.log(data);
+            });
     };
 
     return (
@@ -108,14 +139,14 @@ const UserPageChange = ({ id }) => {
                                     label="Имя"
                                     name="name"
                                     value={data.name}
-                                    error=""
+                                    error={errors.name}
                                     onChange={handleChange}
                                 />
                                 <TextField
                                     label="Электронная почта"
                                     name="email"
                                     value={data.email}
-                                    error=""
+                                    error={errors.email}
                                     onChange={handleChange}
                                 />
                                 <SelectField
@@ -148,6 +179,7 @@ const UserPageChange = ({ id }) => {
                                 <button
                                     type="submit"
                                     className="btn btn-primary w-100 mx-auto"
+                                    disabled={!isValid}
                                 >
                                     Обновить
                                 </button>
@@ -162,8 +194,8 @@ const UserPageChange = ({ id }) => {
     );
 };
 
-UserPageChange.propTypes = {
+EditUserPage.propTypes = {
     id: PropTypes.string.isRequired
 };
 
-export default UserPageChange;
+export default EditUserPage;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../../../api";
 import PropTypes from "prop-types";
 import Qualities from "../../ui/qualities";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const UserPage = ({ id }) => {
     const history = useHistory();
@@ -16,9 +16,9 @@ const UserPage = ({ id }) => {
         history.push("/users");
     };
 
-    // const handleClickTwo = () => {
-    //     history.push(`/users/${id}/edit`);
-    // };
+    const handleClickTwo = () => {
+        history.push(history.location.pathname + "/edit");
+    };
 
     return (
         <>
@@ -31,9 +31,7 @@ const UserPage = ({ id }) => {
                     <h3>Рейтинг: {userById.rate}</h3>
                     <button onClick={handleClick}>Все пользователи</button>
                     <div className="mt-4">
-                        <Link to={`/users/${id}/edit`}>
-                            <button>Change</button>
-                        </Link>
+                        <button onClick={handleClickTwo}>Изменить</button>
                     </div>
                 </div>
             ) : (
