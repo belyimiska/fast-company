@@ -125,10 +125,17 @@ const EditUserPage = ({ id }) => {
             });
     };
 
+    const handleClick = () => {
+        history.push(`/users/${id}`);
+    };
+
     return (
         <>
             {Object.keys(data).length > 0 ? (
                 <div className="container mt-5">
+                    <button className="btn btn-primary" onClick={handleClick}>
+                        <i className="bi bi-caret-left">Назад</i>
+                    </button>
                     <div className="row">
                         <div className="col-md-6 offset-md-3 shadow p-4">
                             <h3 className="mb-4">
