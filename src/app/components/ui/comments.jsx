@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import CommentForm from "../common/comments/commentForm";
+import AddCommentForm from "../common/comments/addCommentForm";
 import CommentsList from "../common/comments/commentsList";
 import api from "../../api";
 import _ from "lodash";
@@ -37,7 +37,7 @@ const Comments = () => {
             <div className="card mb-2">
                 {" "}
                 <div className="card-body ">
-                    <CommentForm onSubmit={handleSubmit} />
+                    <AddCommentForm onSubmit={handleSubmit} />
                 </div>
             </div>
             {comments.length > 0 && (

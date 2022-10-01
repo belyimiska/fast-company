@@ -5,7 +5,7 @@ import TextAreaField from "../form/textAreaField";
 import PropTypes from "prop-types";
 import { validator } from "../../../utils/validator";
 
-const CommentForm = ({ onSubmit }) => {
+const AddCommentForm = ({ onSubmit }) => {
     const [user, setUser] = useState([]);
     const [data, setData] = useState({ userId: "", content: "" });
     const [errors, setErrors] = useState({});
@@ -84,8 +84,8 @@ const CommentForm = ({ onSubmit }) => {
     );
 };
 
-CommentForm.propTypes = {
+AddCommentForm.propTypes = {
     onSubmit: PropTypes.func
 };
 
-export default CommentForm;
+export default AddCommentForm;
