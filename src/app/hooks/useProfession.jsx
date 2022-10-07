@@ -39,7 +39,7 @@ export const ProfessionProvider = ({ children }) => {
         return professions.find((p) => p._id === id);
     }
 
-    function errorCatcher() {
+    function errorCatcher(error) {
         const { message } = error.response.data;
         setError(message);
     }
