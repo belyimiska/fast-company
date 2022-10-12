@@ -7,8 +7,13 @@ import MultiSelectField from "../../common/form/multiSelectField";
 import RadioField from "../../common/form/radioField";
 import { useHistory } from "react-router-dom";
 import { validator } from "../../../utils/validator";
+// import { useUser } from "../../../hooks/useUsers";
 
 const EditUserPage = ({ id }) => {
+    // const { getUserById } = useUser();
+    // const user = getUserById(id);
+    // console.log(user);
+
     const history = useHistory();
 
     const [data, setData] = useState({});
@@ -16,6 +21,19 @@ const EditUserPage = ({ id }) => {
     const [professions, setProfession] = useState([]);
     const [qualities, setQualities] = useState([]);
     const [errors, setErrors] = useState({});
+
+    // useEffect(() => {
+    //     setData({
+    //         name: user.name,
+    //         email: user.email,
+    //         profession: user.profession,
+    //         sex: user.sex,
+    //         qualities: user.qualities.map((q) => ({
+    //             label: q,
+    //             value: q
+    //         }))
+    //     });
+    // }, []);
 
     useEffect(() => {
         api.users.getById(id).then((data) =>
