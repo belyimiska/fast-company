@@ -17,15 +17,15 @@ export function displayDate(data) {
             }
             return `${date.getHours()}:${date.getMinutes()}`;
         }
-        return `${date.getDay()} ${date.toLocaleString("default", {
+        return `${date.getDate()} ${date.toLocaleString("default", {
             month: "long"
         })}`;
     }
-    return (
-        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) +
-        "." +
-        (date.getMonth() + 1) +
-        "." +
-        date.getFullYear()
-    );
+    return date.getDate() < 10
+        ? "0" + date.getDate()
+        : date.getDate() +
+              "." +
+              (date.getMonth() + 1) +
+              "." +
+              date.getFullYear();
 }

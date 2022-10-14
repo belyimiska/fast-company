@@ -5,6 +5,7 @@ import Quality from "./quality";
 
 const QualitiesList = ({ qualities }) => {
     const { isLoading, getQuality } = useQualities();
+    // console.log("качества", qualities);
     if (!isLoading) {
         return (
             <>
