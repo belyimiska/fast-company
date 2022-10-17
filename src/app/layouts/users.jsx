@@ -17,9 +17,9 @@ const Users = () => {
             {userId ? (
                 edit ? (
                     currentUser._id === userId ? (
-                        <EditUserPage id={userId} />
+                        <EditUserPage />
                     ) : (
-                        <Redirect to={`users/${currentUser._id}/edit`} />
+                        <Redirect to={`/users/${currentUser._id}/edit`} />
                     )
                 ) : (
                     <UserPage id={userId} />
