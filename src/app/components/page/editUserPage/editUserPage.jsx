@@ -5,9 +5,16 @@ import MultiSelectField from "../../common/form/multiSelectField";
 import RadioField from "../../common/form/radioField";
 import { useHistory } from "react-router-dom";
 import { validator } from "../../../utils/validator";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useQualities } from "../../../hooks/useQuality";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import {
+    getQualities,
+    getQualitiesLoadingStatus
+} from "../../../store/qualities";
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from "../../../store/professions";
 
 const EditUserPage = () => {
     const history = useHistory();
@@ -16,24 +23,31 @@ const EditUserPage = () => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-    const { professions, isLoading: professionLoading } = useProfessions();
+    const professions = useSelector(getProfessions());
+    const professionLoading = useSelector(getProfessionsLoadingStatus());
     const professionsList = professions.map((prof) => ({
         label: prof.name,
         value: prof._id
     }));
 
-    const {
-        qualities,
-        isLoading: qualitiesLoading,
-        getQuality
-    } = useQualities();
+    const qualities = useSelector(getQualities());
+    const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
     const qualitiesList = qualities.map((qual) => ({
         label: qual.name,
         value: qual._id
     }));
 
-    const getQualitiesListByIds = (qualIds) => {
-        return qualIds.map((q) => getQuality(q));
+    const getQualitiesListByIds = (qualitiesIds) => {
+        const qualitiesArray = [];
+        for (const qualId of qualitiesIds) {
+            for (const quality of qualities) {
+                if (quality._id === qualId) {
+                    qualitiesArray.push(quality);
+                    break;
+                }
+            }
+        }
+        return qualitiesArray;
     };
 
     const transformData = (data) => {
