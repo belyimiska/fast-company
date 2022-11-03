@@ -55,6 +55,7 @@ export const CommentsProvider = ({ children }) => {
     async function removeComment(id) {
         try {
             const { content } = await commentService.removeComment(id);
+            console.log(content);
             if (content === null) {
                 setComments((prevState) =>
                     prevState.filter((com) => com._id !== id)
