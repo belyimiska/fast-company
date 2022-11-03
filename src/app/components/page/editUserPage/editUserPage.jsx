@@ -5,8 +5,7 @@ import MultiSelectField from "../../common/form/multiSelectField";
 import RadioField from "../../common/form/radioField";
 import { useHistory } from "react-router-dom";
 import { validator } from "../../../utils/validator";
-import { useAuth } from "../../../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     getQualities,
     getQualitiesLoadingStatus
@@ -15,10 +14,15 @@ import {
     getProfessions,
     getProfessionsLoadingStatus
 } from "../../../store/professions";
+import { getCurrentUserData, updateUser } from "../../../store/users";
 
 const EditUserPage = () => {
+    const dispatch = useDispatch();
+
     const history = useHistory();
-    const { currentUser, updateUser } = useAuth();
+
+    const currentUser = useSelector(getCurrentUserData());
+
     const [data, setData] = useState();
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
@@ -107,7 +111,7 @@ const EditUserPage = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return null;
@@ -116,12 +120,16 @@ const EditUserPage = () => {
             qualities: data.qualities.map((q) => q.value)
         };
 
-        try {
-            await updateUser(newData);
-            history.push(`/users/${currentUser._id}`);
-        } catch (error) {
-            setErrors(error);
-        }
+        const redirect = `/users/${currentUser._id}`;
+
+        dispatch(updateUser({ payload: newData, redirect }));
+
+        // try {
+        //     await updateUser(newData);
+        //     history.push(`/users/${currentUser._id}`);
+        // } catch (error) {
+        //     setErrors(error);
+        // }
     };
 
     const handleClick = () => {
