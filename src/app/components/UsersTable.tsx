@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { UserType } from "../api/fake.api/user.api";
 import Bookmark from "./Bookmark";
 import QualitiesList from "./QualitiesList";
@@ -14,7 +15,7 @@ type UsersTableProps = {
 
 const UsersTable = ({ users, selectedSort, onSort, onToggleBookmark, onDelete }: UsersTableProps) => {
   const columns = {
-    name: { path: "name", name: "Имя" },
+    name: { name: "Имя", component: (user: UserType) => <Link to={`/users/${user._id}`}>{user.name}</Link> },
     qualities: { name: "Качества", component: (user: UserType) => <QualitiesList qualities={user.qualities} /> },
     profession: { path: "profession.name", name: "Профессия" },
     completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },

@@ -10,7 +10,7 @@ import SearchStatus from "./SearchStatus";
 import UsersTable from "./UsersTable";
 import type { SortBy } from "./TableHeader";
 
-const Users = () => {
+const UsersList = () => {
   const [users, setUsers] = useState<UserType[] | null>(null);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -112,4 +112,4 @@ const Users = () => {
   return <h2>Loading...</h2>;
 };
 
-export default Users;
+export default UsersList;

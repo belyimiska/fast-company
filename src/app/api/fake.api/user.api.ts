@@ -144,8 +144,17 @@ const users: UserType[] = [
   },
 ];
 
-const fetchAll = () => new Promise<UserType[]>((res) => setTimeout(() => res(users), 1500));
+const fetchAll = () =>
+  new Promise<UserType[]>((res) => {
+    setTimeout(() => res(users), 1000);
+  });
+
+const getById = (id: UserType["_id"]) =>
+  new Promise<UserType | undefined>((res) => {
+    setTimeout(() => res(users.find((user) => user._id === id)), 800);
+  });
 
 export const usersApi = {
   fetchAll,
+  getById,
 };
