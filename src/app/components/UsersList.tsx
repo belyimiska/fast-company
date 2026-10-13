@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import _ from "lodash";
 import Pagination from "./Pagination";
 import type { UserType } from "../api/fake.api/user.api";
@@ -17,6 +17,7 @@ const UsersList = () => {
   const [professions, setProfessions] = useState<Profession[] | ProfessionsType | null>(null);
   const [selectedProf, setSelectedProf] = useState<Profession | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>({ path: "name", order: "asc" });
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     const res = API.users.fetchAll();
@@ -30,7 +31,7 @@ const UsersList = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedProf]);
+  }, [selectedProf, searchQuery]);
 
   const pageSize: number = 8;
 
@@ -44,12 +45,22 @@ const UsersList = () => {
   const handleToggleBookmark = (userId: UserType["_id"]) => {
     setUsers((prevUsers) => {
       if (prevUsers === null) return null;
-      return prevUsers.map((user) => (user._id === userId ? { ...user, bookmark: !user.bookmark } : user));
+      return prevUsers.map((user) =>
+        user._id === userId ? { ...user, bookmark: !user.bookmark } : user,
+      );
     });
+  };
+
+  const handleSearchQuery = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(target.value);
+    if (selectedProf) {
+      setSelectedProf(null);
+    }
   };
 
   const handleProfessionSelect = (item: Profession) => {
     setSelectedProf(item);
+    setSearchQuery("");
   };
 
   const handlePageChange = (pageIndex: number) => {
@@ -61,9 +72,11 @@ const UsersList = () => {
   };
 
   if (users) {
-    const filteredUsers = selectedProf
-      ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
-      : users;
+    const filteredUsers = searchQuery
+      ? users.filter((user) => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
+      : selectedProf
+        ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
+        : users;
 
     const count = filteredUsers.length;
 
@@ -79,7 +92,11 @@ const UsersList = () => {
       <div className="d-flex">
         {professions && (
           <div className="d-flex flex-column flex-shrink-0 p-3">
-            <GroupList items={professions} selectedItem={selectedProf} onItemSelect={handleProfessionSelect} />
+            <GroupList
+              items={professions}
+              selectedItem={selectedProf}
+              onItemSelect={handleProfessionSelect}
+            />
             <button onClick={clearFilter} className="btn btn-secondary mt-2">
               Очистить
             </button>
@@ -87,6 +104,14 @@ const UsersList = () => {
         )}
         <div className="d-flex flex-column">
           <SearchStatus length={count} />
+
+          <input
+            type="text"
+            placeholder="Введите имя..."
+            name="searchQuery"
+            value={searchQuery}
+            onChange={handleSearchQuery}
+          />
 
           {count > 0 && (
             <UsersTable

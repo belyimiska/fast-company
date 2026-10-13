@@ -13,17 +13,32 @@ type UsersTableProps = {
   onToggleBookmark: (userId: UserType["_id"]) => void;
 };
 
-const UsersTable = ({ users, selectedSort, onSort, onToggleBookmark, onDelete }: UsersTableProps) => {
+const UsersTable = ({
+  users,
+  selectedSort,
+  onSort,
+  onToggleBookmark,
+  onDelete,
+}: UsersTableProps) => {
   const columns = {
-    name: { name: "Имя", component: (user: UserType) => <Link to={`/users/${user._id}`}>{user.name}</Link> },
-    qualities: { name: "Качества", component: (user: UserType) => <QualitiesList qualities={user.qualities} /> },
+    name: {
+      path: "name",
+      name: "Имя",
+      component: (user: UserType) => <Link to={`/users/${user._id}`}>{user.name}</Link>,
+    },
+    qualities: {
+      name: "Качества",
+      component: (user: UserType) => <QualitiesList qualities={user.qualities} />,
+    },
     profession: { path: "profession.name", name: "Профессия" },
     completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },
     rate: { path: "rate", name: "Оценка" },
     bookmark: {
       path: "bookmark",
       name: "Избранное",
-      component: (user: UserType) => <Bookmark status={user.bookmark} onClick={() => onToggleBookmark(user._id)} />,
+      component: (user: UserType) => (
+        <Bookmark status={user.bookmark} onClick={() => onToggleBookmark(user._id)} />
+      ),
     },
     delete: {
       name: "",
