@@ -1,4 +1,4 @@
-import { UserType } from "../api/fake.api/user.api";
+import { UserType } from "../../../api/fake.api/user.api";
 import Quality from "./Quality";
 
 type QualitiesListProps = {

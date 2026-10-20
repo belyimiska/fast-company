@@ -1,15 +1,24 @@
 import { ChangeEvent, useState } from "react";
 
-type TextFieldProps = {
+type TextFieldProps<Name extends string> = {
   label: string;
   type?: string;
   error?: string;
-  name: string;
+  name: Name;
   value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  autoComplete?: string;
+  onFieldChange: (field: { name: Name; value: string }) => void;
 };
 
-const TextField = ({ type = "text", label, name, value, error, onChange }: TextFieldProps) => {
+const TextField = <Name extends string>({
+  type = "text",
+  autoComplete = "off",
+  label,
+  name,
+  value,
+  error,
+  onFieldChange,
+}: TextFieldProps<Name>) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const toggleShowPassword = () => {
@@ -18,6 +27,10 @@ const TextField = ({ type = "text", label, name, value, error, onChange }: TextF
 
   const getInputClasses = () => {
     return "form-control" + (error ? " is-invalid" : "");
+  };
+
+  const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    onFieldChange({ name, value: target.value });
   };
 
   return (
@@ -29,11 +42,12 @@ const TextField = ({ type = "text", label, name, value, error, onChange }: TextF
           id={name}
           name={name}
           value={value}
-          onChange={onChange}
+          autoComplete={autoComplete}
+          onChange={handleInputChange}
           className={getInputClasses()}
         />
         {type === "password" && (
-          <button onClick={toggleShowPassword} className="btn btn-outline-secondary">
+          <button type="button" onClick={toggleShowPassword} className="btn btn-outline-secondary">
             <i className={"bi bi-eye" + (showPassword ? "-slash" : "")}></i>
           </button>
         )}

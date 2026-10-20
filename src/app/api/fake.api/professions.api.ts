@@ -31,9 +31,9 @@ export const professions = [
 ];
 
 const fetchAll = () =>
-  new Promise<Profession[] | ProfessionsType>((res) => {
+  new Promise<ProfessionsType>((res) => {
     setTimeout(function () {
-      res(professions);
+      res(professionsObject);
     }, 1000);
   });
 

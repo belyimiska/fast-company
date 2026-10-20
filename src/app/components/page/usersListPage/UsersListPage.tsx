@@ -1,20 +1,20 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import _ from "lodash";
-import Pagination from "./Pagination";
-import type { UserType } from "../api/fake.api/user.api";
-import { paginate } from "../utils/paginate";
-import GroupList from "./GroupList";
-import API from "../api";
-import type { Profession, ProfessionsType } from "../api/fake.api/professions.api";
-import SearchStatus from "./SearchStatus";
-import UsersTable from "./UsersTable";
-import type { SortBy } from "./TableHeader";
+import Pagination from "../../common/Pagination";
+import type { UserType } from "../../../api/fake.api/user.api";
+import { paginate } from "../../../utils/paginate";
+import GroupList from "../../common/GroupList";
+import API from "../../../api";
+import type { Profession, ProfessionsType } from "../../../api/fake.api/professions.api";
+import SearchStatus from "../../ui/SearchStatus";
+import UsersTable from "../../ui/UsersTable";
+import type { SortBy } from "../../common/table/TableHeader";
 
-const UsersList = () => {
+const UsersListPage = () => {
   const [users, setUsers] = useState<UserType[] | null>(null);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [professions, setProfessions] = useState<Profession[] | ProfessionsType | null>(null);
+  const [professions, setProfessions] = useState<ProfessionsType | null>(null);
   const [selectedProf, setSelectedProf] = useState<Profession | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>({ path: "name", order: "asc" });
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -137,4 +137,4 @@ const UsersList = () => {
   return <h2>Loading...</h2>;
 };
 
-export default UsersList;
+export default UsersListPage;

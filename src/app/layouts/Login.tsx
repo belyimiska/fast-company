@@ -1,95 +1,36 @@
-import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
-import TextField from "../components/TextField";
-import { validator } from "../utils/validator";
-
-type LoginData = {
-  email: string;
-  password: string;
-};
-
-type LoginErrors = {
-  email?: string;
-  password?: string;
-};
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
+import LoginForm from "../components/ui/LoginForm";
+import RegisterForm from "../components/ui/RegisterForm";
 
 const Login = () => {
-  const [data, setData] = useState<LoginData>({ email: "", password: "" });
-  const [errors, setErrors] = useState<LoginErrors>({});
-
-  const validatorConfig = {
-    email: {
-      isRequired: {
-        message: "Почта обязательна для заполнения",
-      },
-      isEmail: {
-        message: "Почта введена некорректно",
-      },
-    },
-    password: {
-      isRequired: {
-        message: "Пароль обязателен для заполнения",
-      },
-      isCapitalSymbol: {
-        message: "Пароль должен содержать хотя бы одну заглавную букву",
-      },
-      isContainDigit: {
-        message: "Пароль должен содержать хотя бы одну цифру",
-      },
-      minLength: {
-        message: "Пароль должен состоять минимум из 8 символов",
-        value: 8,
-      },
-    },
-  };
-
-  const validate = useCallback(() => {
-    const newErrors: LoginErrors = validator(data, validatorConfig);
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [data]);
-
-  const isValid = Object.keys(errors).length === 0;
-
-  useEffect(() => {
-    validate();
-  }, [validate]);
-
-  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    setData((prev) => ({ ...prev, [target.name]: target.value }));
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const isValid = validate();
-    if (!isValid) return;
-    console.log(data);
-  };
+  const { type } = useParams<{ type?: string }>();
 
   return (
     <div className="container pt-5">
       <div className="row">
         <div className="col-md-6 offset-md-3 shadow p-4">
-          <h3 className="mb-3">Login Form</h3>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Почта"
-              name="email"
-              value={data.email}
-              error={errors.email}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Пароль"
-              name="password"
-              type="password"
-              value={data.password}
-              error={errors.password}
-              onChange={handleChange}
-            />
-            <button disabled={!isValid} className="btn btn-primary w-100 mx-auto">
-              Войти
-            </button>
-          </form>
+          {type === "register" ? (
+            <>
+              <h3 className="mb-3">Регистрация</h3>
+              <RegisterForm />
+              <div className="text-center">
+                <p>
+                  Уже есть аккаунт? <Link to="/login">Войти</Link>
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 className="mb-3">Авторизация</h3>
+              <LoginForm />
+              <div className="text-center">
+                <p>
+                  Нет аккаунта? <Link to="/login/register">Зарегистрироваться</Link>
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

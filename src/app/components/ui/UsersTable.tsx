@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { UserType } from "../api/fake.api/user.api";
-import Bookmark from "./Bookmark";
-import QualitiesList from "./QualitiesList";
-import Table from "./Table";
-import { SortBy } from "./TableHeader";
+import { UserType } from "../../api/fake.api/user.api";
+import Bookmark from "../common/Bookmark";
+import Qualities from "./qualities/QualitiesList";
+import Table from "../common/table";
+import { SortBy } from "../common/table/TableHeader";
 
 type UsersTableProps = {
   users: UserType[];
@@ -28,7 +28,7 @@ const UsersTable = ({
     },
     qualities: {
       name: "Качества",
-      component: (user: UserType) => <QualitiesList qualities={user.qualities} />,
+      component: (user: UserType) => <Qualities qualities={user.qualities} />,
     },
     profession: { path: "profession.name", name: "Профессия" },
     completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },

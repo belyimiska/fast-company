@@ -1,4 +1,4 @@
-import type { Quality as QualityType } from "../api/fake.api/user.api";
+import type { Quality as QualityType } from "../../../api/fake.api/user.api";
 
 type QualityProps = {
   color: QualityType["color"];

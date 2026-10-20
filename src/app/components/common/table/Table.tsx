@@ -5,7 +5,10 @@ import TableHeader, { SortBy } from "./TableHeader";
 type TableProps<T> =
   | {
       data: T[];
-      columns: Record<string, { path?: string; name?: string; component?: ReactNode | ((item: T) => ReactNode) }>;
+      columns: Record<
+        string,
+        { path?: string; name?: string; component?: ReactNode | ((item: T) => ReactNode) }
+      >;
       selectedSort: SortBy;
       onSort: (sortItem: SortBy) => void;
     }

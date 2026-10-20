@@ -1,36 +1,53 @@
+type FormValue = string | unknown[] | boolean;
+
 type ValidationRule = {
   message: string;
   value?: number;
 };
 type FieldRules = Record<string, ValidationRule>;
-type ValidatorConfig<T> = Record<keyof T, FieldRules>;
+type ValidatorConfig<T> = Partial<Record<keyof T, FieldRules>>;
 type ValidationErrors<T> = Partial<Record<keyof T, string>>;
 
-export function validator<T extends Record<string, string>>(data: T, config: ValidatorConfig<T>) {
+export function validator<T extends Record<string, FormValue>>(
+  data: T,
+  config: ValidatorConfig<T>,
+) {
   const errors: ValidationErrors<T> = {};
-  function validate(method: string, value: string, rule: ValidationRule): string | undefined {
+  function validate(method: string, value: FormValue, rule: ValidationRule): string | undefined {
     let statusValidate;
     switch (method) {
       case "isRequired":
-        statusValidate = value.trim() === "";
+        if (Array.isArray(value)) {
+          statusValidate = value.length === 0;
+        } else if (typeof value === "string") {
+          statusValidate = value.trim() === "";
+        } else if (typeof value === "boolean") {
+          statusValidate = !value;
+        }
         break;
       case "isEmail": {
-        const emailRegExp = /^\S+@\S+\.\S+$/g;
-        statusValidate = !emailRegExp.test(value);
+        if (typeof value === "string") {
+          const emailRegExp = /^\S+@\S+\.\S+$/g;
+          statusValidate = !emailRegExp.test(value);
+        }
         break;
       }
       case "isCapitalSymbol": {
-        const capitalRegExp = /[A-Z]+/g;
-        statusValidate = !capitalRegExp.test(value);
+        if (typeof value === "string") {
+          const capitalRegExp = /[A-Z]+/g;
+          statusValidate = !capitalRegExp.test(value);
+        }
         break;
       }
       case "isContainDigit": {
-        const digitRegExp = /\d+/g;
-        statusValidate = !digitRegExp.test(value);
+        if (typeof value === "string") {
+          const digitRegExp = /\d+/g;
+          statusValidate = !digitRegExp.test(value);
+        }
         break;
       }
       case "minLength": {
-        if (rule.value !== undefined) {
+        if (rule.value !== undefined && typeof value === "string") {
           statusValidate = value.length < rule.value;
         }
         break;
@@ -42,8 +59,10 @@ export function validator<T extends Record<string, string>>(data: T, config: Val
   }
 
   for (const fieldName in data) {
-    for (const validateMethod in config[fieldName]) {
-      const error = validate(validateMethod, data[fieldName], config[fieldName][validateMethod]);
+    const rules = config[fieldName];
+    if (!rules) continue;
+    for (const validateMethod in rules) {
+      const error = validate(validateMethod, data[fieldName], rules[validateMethod]);
       if (error) {
         errors[fieldName] = error;
         break;

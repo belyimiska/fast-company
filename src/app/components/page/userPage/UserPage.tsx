@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import API from "../api";
-import { UserType } from "../api/fake.api/user.api";
-import QualitiesList from "./QualitiesList";
+import API from "../../../api";
+import { UserType } from "../../../api/fake.api/user.api";
+import QualitiesList from "../../ui/qualities/QualitiesList";
 
 type UserPageProps = {
   id: UserType["_id"];
