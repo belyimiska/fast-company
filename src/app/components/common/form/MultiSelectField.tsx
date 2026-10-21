@@ -7,6 +7,7 @@ export type MultiFieldOption = {
 
 type MultiSelectFieldProps<Name extends string> = {
   options: MultiFieldOption[] | Record<string, MultiFieldOption> | null;
+  value: MultiFieldOption[];
   name: Name;
   label: string;
   error?: string;
@@ -15,6 +16,7 @@ type MultiSelectFieldProps<Name extends string> = {
 
 const MultiSelectField = <Name extends string>({
   options,
+  value,
   name,
   label,
   error,
@@ -32,6 +34,7 @@ const MultiSelectField = <Name extends string>({
       <legend className="fs-5">{label}</legend>
       <Select
         isMulti
+        value={value}
         name={name}
         options={optionsArray}
         closeMenuOnSelect={false}

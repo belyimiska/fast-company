@@ -1,4 +1,5 @@
 import { Redirect, Route, Switch } from "react-router-dom";
+import EditUserPage from "./components/page/EditUserPage";
 import Navbar from "./components/ui/Navbar";
 import Login from "./layouts/Login";
 import Main from "./layouts/Main";
@@ -10,7 +11,8 @@ export default function App() {
       <Navbar />
       <Switch>
         <Route path="/login/:type?" component={Login} />
-        <Route path="/users/:userId?" component={Users} />
+        <Route path="/users/:userId/edit" component={EditUserPage} />
+        <Route path="/users/:userId?" exact component={Users} />
         <Route path="/" exact component={Main} />
         <Redirect to="/" />
       </Switch>

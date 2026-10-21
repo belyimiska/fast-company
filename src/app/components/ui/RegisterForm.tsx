@@ -198,6 +198,7 @@ const RegisterForm = () => {
       />
       <MultiSelectField
         options={qualityOptions}
+        value={data.qualities}
         error={errors.qualities}
         name="qualities"
         label="Выберите качества"

@@ -1,22 +1,20 @@
-import { ChangeEvent } from "react";
-
-type RadioFieldProps<Name extends string> = {
-  options: { name: string; value: string }[];
+type RadioFieldProps<Name extends string, Value extends string> = {
+  options: { name: string; value: Value }[];
   name: Name;
-  value: string;
+  value: Value;
   label: string;
-  onFieldChange: (field: { name: Name; value: string }) => void;
+  onFieldChange: (field: { name: Name; value: Value }) => void;
 };
 
-const RadioField = <Name extends string>({
+const RadioField = <Name extends string, Value extends string>({
   options,
   name,
   label,
   value,
   onFieldChange,
-}: RadioFieldProps<Name>) => {
-  const handleRadioChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    onFieldChange({ name, value: target.value });
+}: RadioFieldProps<Name, Value>) => {
+  const handleRadioChange = (selectedValue: Value) => {
+    onFieldChange({ name, value: selectedValue });
   };
 
   return (
@@ -31,7 +29,7 @@ const RadioField = <Name extends string>({
             checked={option.value === value}
             id={option.name + "_" + option.value}
             value={option.value}
-            onChange={handleRadioChange}
+            onChange={() => handleRadioChange(option.value)}
           />
           <label className="form-check-label" htmlFor={option.name + "_" + option.value}>
             {option.name}

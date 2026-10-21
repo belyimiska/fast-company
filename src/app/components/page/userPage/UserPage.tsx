@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import API from "../../../api";
 import { UserType } from "../../../api/fake.api/user.api";
 import QualitiesList from "../../ui/qualities/QualitiesList";
@@ -9,7 +9,6 @@ type UserPageProps = {
 };
 
 const UserPage = ({ id }: UserPageProps) => {
-  const history = useHistory();
   const [user, setUser] = useState<UserType | undefined>(undefined);
 
   useEffect(() => {
@@ -17,9 +16,6 @@ const UserPage = ({ id }: UserPageProps) => {
     res.then((data) => setUser(data));
   }, [id]);
 
-  const handleReturn = () => {
-    history.replace("/users");
-  };
   return (
     <>
       {!user && <h4>Loading...</h4>}
@@ -32,9 +28,9 @@ const UserPage = ({ id }: UserPageProps) => {
           </h5>
           <h5>Количество встреч: {user.completedMeetings}</h5>
           <h3>Оценка: {user.rate}</h3>
-          <button onClick={handleReturn} className="btn btn-dark mt-3">
-            Все пользователи
-          </button>
+          <Link to={`/users/${id}/edit`} className="btn btn-dark mt-3">
+            Изменить
+          </Link>
         </div>
       )}
     </>
