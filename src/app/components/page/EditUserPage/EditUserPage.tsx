@@ -4,6 +4,7 @@ import API from "../../../api";
 import { Profession, ProfessionsType } from "../../../api/fake.api/professions.api";
 import { QualitiesType, Quality, UserType } from "../../../api/fake.api/user.api";
 import { validator } from "../../../utils/validator";
+import BackHistoryButton from "../../common/BackButton";
 import MultiSelectField, { MultiFieldOption } from "../../common/form/MultiSelectField";
 import RadioField from "../../common/form/RadioField";
 import SelectField from "../../common/form/SelectField";
@@ -191,6 +192,7 @@ const EditUserPage = () => {
 
   return (
     <div className="container pt-5">
+      <BackHistoryButton />
       <div className="row">
         <div className="col-md-6 offset-md-3 shadow p-4">
           {isLoading && <h4>Loading...</h4>}

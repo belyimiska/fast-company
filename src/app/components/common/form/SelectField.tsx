@@ -1,13 +1,13 @@
 import { ChangeEvent } from "react";
 
-type SourceOption = {
+export type SourceOption = {
   value: string;
   label: string;
 };
 
 type SelectFieldProps<Name extends string> = {
   options: SourceOption[] | Record<string, SourceOption> | null;
-  label: string;
+  label?: string;
   defaultOption: string;
   error?: string;
   name: Name;
