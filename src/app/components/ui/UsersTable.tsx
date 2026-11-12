@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
-import { UserType } from "../../api/fake.api/user.api";
-import Bookmark from "../common/Bookmark";
 import Qualities from "./qualities/QualitiesList";
 import Table from "../common/table";
 import { SortBy } from "../common/table/TableHeader";
+import Profession from "./Profession";
+import { ServerUser } from "../../types/user";
 
 type UsersTableProps = {
-  users: UserType[];
+  users: ServerUser[];
   selectedSort: SortBy;
   onSort: (sortItem: SortBy) => void;
-  onDelete: (userId: UserType["_id"]) => void;
-  onToggleBookmark: (userId: UserType["_id"]) => void;
+  onDelete: (userId: ServerUser["_id"]) => void;
+  onToggleBookmark: (userId: ServerUser["_id"]) => void;
 };
 
 const UsersTable = ({
@@ -24,25 +24,28 @@ const UsersTable = ({
     name: {
       path: "name",
       name: "Имя",
-      component: (user: UserType) => <Link to={`/users/${user._id}`}>{user.name}</Link>,
+      component: (user: ServerUser) => <Link to={`/users/${user._id}`}>{user.name}</Link>,
     },
     qualities: {
       name: "Качества",
-      component: (user: UserType) => <Qualities qualities={user.qualities} />,
+      component: (user: ServerUser) => <Qualities qualities={user.qualities} />,
     },
-    profession: { path: "profession.name", name: "Профессия" },
+    profession: {
+      name: "Профессия",
+      component: (user: ServerUser) => <Profession id={user.profession} />,
+    },
     completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },
     rate: { path: "rate", name: "Оценка" },
-    bookmark: {
-      path: "bookmark",
-      name: "Избранное",
-      component: (user: UserType) => (
-        <Bookmark status={user.bookmark} onClick={() => onToggleBookmark(user._id)} />
-      ),
-    },
+    // bookmark: {
+    //   path: "bookmark",
+    //   name: "Избранное",
+    //   component: (user: UserType) => (
+    //     <Bookmark status={user.bookmark} onClick={() => onToggleBookmark(user._id)} />
+    //   ),
+    // },
     delete: {
       name: "",
-      component: (user: UserType) => (
+      component: (user: ServerUser) => (
         <button onClick={() => onDelete(user._id)} className="btn btn-danger">
           delete
         </button>

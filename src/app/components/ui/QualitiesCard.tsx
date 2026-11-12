@@ -13,7 +13,7 @@ const QualitiesCard = ({ qualities }: QualitiesCardProps) => {
           <span>Qualities</span>
         </h5>
         <p className="card-text">
-          <QualitiesList qualities={qualities} />
+          <QualitiesList qualities={qualities.map((quality) => quality._id)} />
         </p>
       </div>
     </div>

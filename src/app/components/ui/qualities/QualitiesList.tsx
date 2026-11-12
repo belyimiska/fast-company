@@ -1,15 +1,21 @@
-import { UserType } from "../../../api/fake.api/user.api";
+import { useQualities } from "../../../hooks/useQualities";
+import { ServerUser } from "../../../types/user";
 import Quality from "./Quality";
 
 type QualitiesListProps = {
-  qualities: UserType["qualities"];
+  qualities: ServerUser["qualities"];
 };
 
 const QualitiesList = ({ qualities }: QualitiesListProps) => {
+  const { isLoading, error } = useQualities();
+
+  if (isLoading) return <span>Загрузка...</span>;
+  if (error !== null) return <span>{error}</span>;
+
   return (
     <>
       {qualities.map((qual) => (
-        <Quality key={qual._id} {...qual} />
+        <Quality key={qual} id={qual} />
       ))}
     </>
   );

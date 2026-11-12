@@ -9,20 +9,16 @@ import type { Profession, ProfessionsType } from "../../../api/fake.api/professi
 import SearchStatus from "../../ui/SearchStatus";
 import UsersTable from "../../ui/UsersTable";
 import type { SortBy } from "../../common/table/TableHeader";
+import { useUsers } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
-  const [users, setUsers] = useState<UserType[] | null>(null);
+  const users = useUsers();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [professions, setProfessions] = useState<ProfessionsType | null>(null);
   const [selectedProf, setSelectedProf] = useState<Profession | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>({ path: "name", order: "asc" });
   const [searchQuery, setSearchQuery] = useState<string>("");
-
-  useEffect(() => {
-    const res = API.users.fetchAll();
-    res.then((data) => setUsers(data));
-  }, []);
 
   useEffect(() => {
     const res = API.professions.fetchAll();
@@ -36,19 +32,21 @@ const UsersListPage = () => {
   const pageSize: number = 8;
 
   const handleDeleteUser = (userId: UserType["_id"]) => {
-    setUsers((prevUsers) => {
-      if (prevUsers === null) return null;
-      return prevUsers.filter((user) => user._id !== userId);
-    });
+    // setUsers((prevUsers) => {
+    //   if (prevUsers === null) return null;
+    //   return prevUsers.filter((user) => user._id !== userId);
+    // });
+    console.log(userId);
   };
 
   const handleToggleBookmark = (userId: UserType["_id"]) => {
-    setUsers((prevUsers) => {
-      if (prevUsers === null) return null;
-      return prevUsers.map((user) =>
-        user._id === userId ? { ...user, bookmark: !user.bookmark } : user,
-      );
-    });
+    // setUsers((prevUsers) => {
+    //   if (prevUsers === null) return null;
+    //   return prevUsers.map((user) =>
+    //     user._id === userId ? { ...user, bookmark: !user.bookmark } : user,
+    //   );
+    // });
+    console.log(userId);
   };
 
   const handleSearchQuery = ({ target }: ChangeEvent<HTMLInputElement>) => {
